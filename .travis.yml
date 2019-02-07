@@ -1,0 +1,6 @@
+# .travis.yml
+language: python3
+script: "python3 test.py"
+branches:
+  only:
+    - master
