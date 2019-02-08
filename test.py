@@ -1,9 +1,19 @@
-from xunit.was_run import WasRun
+from xunit.test_case import TestCase, WasRun
 
-test = WasRun("testMethod")
 
-print(test.was_run)
+class TestCaseTest(TestCase):
 
-test.test_method()
+    def setup(self):
+        self.test = WasRun("test_method")
 
-print(test.was_run)
+    def test_running(self):
+        self.test.run()
+        assert self.test.was_run
+
+    def test_setup(self):
+        self.test.run()
+        assert self.test.was_setup
+
+
+TestCaseTest("test_running").run()
+TestCaseTest("test_setup").run()
