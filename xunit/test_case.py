@@ -1,24 +1,42 @@
 class TestResult:
     def __init__(self):
         self.run_count = 0
+        self.failure_count = 0
 
     def test_started(self):
         self.run_count += 1
 
+    def test_failed(self):
+        self.failure_count += 1
+
     def summary(self):
-        return f"{self.run_count} run, 0 failed"
+        return "{} run, {} failed".format(self.run_count, self.failure_count)
+
+
+class TestSuite:
+    def __init__(self):
+        self.tests = []
+
+    def add(self, test):
+        self.tests.append(test)
+
+    def run(self, result):
+        for test in self.tests:
+            test.run(result)
 
 
 class TestCase:
     def __init__(self, name):
         self.name = name
 
-    def run(self):
-        result = TestResult()
+    def run(self, result):
         result.test_started()
         self.setup()
-        method = getattr(self, self.name)
-        method()
+        try:
+            method = getattr(self, self.name)
+            method()
+        except:
+            result.test_failed()
         self.teardown()
         return result
 
