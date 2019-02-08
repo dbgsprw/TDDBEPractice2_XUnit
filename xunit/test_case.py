@@ -1,12 +1,26 @@
+class TestResult:
+    def __init__(self):
+        self.run_count = 0
+
+    def test_started(self):
+        self.run_count += 1
+
+    def summary(self):
+        return f"{self.run_count} run, 0 failed"
+
+
 class TestCase:
     def __init__(self, name):
         self.name = name
 
     def run(self):
+        result = TestResult()
+        result.test_started()
         self.setup()
         method = getattr(self, self.name)
         method()
         self.teardown()
+        return result
 
     def setup(self):
         pass
@@ -31,3 +45,6 @@ class WasRun(TestCase):
 
     def teardown(self):
         self.log = self.log + "teardown "
+
+    def test_broken_method(self):
+        raise Exception
